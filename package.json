@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "commander": "^2.20.0",
-    "fs": "0.0.1-security"
+    "fs": "0.0.1-security",
+    "web3": "^1.0.0-beta.55"
   }
 }
