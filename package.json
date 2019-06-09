@@ -1,0 +1,31 @@
+{
+  "name": "cookie",
+  "version": "1.0.0",
+  "description": "Smart contract deployment framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/syahrul12345/Cookie.git"
+  },
+  "keywords": [
+    "Ethereum",
+    "framework",
+    "solidty"
+  ],
+  "author": "Syahrul Nizam",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/syahrul12345/Cookie/issues"
+  },
+  "homepage": "https://github.com/syahrul12345/Cookie#readme",
+  "bin": {
+    "cookie": "./index.js"
+  },
+  "dependencies": {
+    "commander": "^2.20.0",
+    "fs": "0.0.1-security"
+  }
+}
