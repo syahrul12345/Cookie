@@ -36,18 +36,14 @@ if (program.deploy === true) {
   //get the bin and deploy
   fs.readdir(path.resolve(process.cwd(),'build'),function(err,files) {
     files.forEach(function(file){
-      if(path.extname(file) == '.bin'){
-        Deploy.deploy(path.resolve(process.cwd(),'build',file),'default')
-      }
+      Deploy.deploy(path.resolve(process.cwd(),'build',file),'default')
     })
   })
 }
 else if(program.deploy){
   fs.readdir(path.resolve(process.cwd(),'build'),function(err,files) {
     files.forEach(function(file){
-      if(path.extname(file) == '.bin'){
-        Deploy.deploy(path.resolve(process.cwd(),'build',file),`${program.deploy}`)
-      }
+      Deploy.deploy(path.resolve(process.cwd(),'build',file),`${program.deploy}`)
     })
   })
 }
