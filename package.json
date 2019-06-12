@@ -25,6 +25,7 @@
     "cookie": "./index.js"
   },
   "dependencies": {
+    "@angular/cli": "^8.0.2",
     "commander": "^2.20.0",
     "fs": "0.0.1-security",
     "web3": "^1.0.0-beta.55"
