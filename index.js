@@ -9,11 +9,13 @@ const fs = require('fs')
 const Compile = require('./lib/compile.js')
 const Deploy = require('./lib/deploy.js')
 const Generate = require('./lib/generate.js')
+const Server = require('./lib/server.js')
 program
   .option('new <type>','Creates new project directory')
   .option('compile','Compiles solidity smart contracts (only)')
-  .option('generate','Generates the schematic for Angular frontend only')
+  .option('generate','Create YAML file to create front-end application')
   .option('deploy [config]','Deploy the smart contract(only)')
+  .option('serve [config]','Create front end application,extension of generate command')
   .option('bake [config]','Compile & Deploy smart contract. Generate a front-end application')
 //parse arguments
 program.parse(process.argv);
@@ -28,10 +30,8 @@ if (program.new){
 if (program.compile) {
   //get the location of smart bcontracts
   fs.readdir(path.resolve(process.cwd(),'contract'),function(err,files) {
-    files.forEach(function(file) {
-      fullPath = path.resolve(process.cwd(),'contract',file)
-      Compile.compile(fullPath)
-    })
+    //files come in an array
+    Compile.compile(files)
   })
 }
 if (program.deploy === true) {
@@ -49,40 +49,45 @@ else if(program.deploy){
     })
   })
 }
-if(program.bake === true) {
-  fs.readdir(path.resolve(process.cwd(),'contract'),function(err,files) {
-    files.forEach(function(file) {
-      fullPath = path.resolve(process.cwd(),'contract',file)
-      Compile.compile(fullPath)
-    })
-  })
-  fs.readdir(path.resolve(process.cwd(),'build'),function(err,files) {
-    files.forEach(function(file){
-      Deploy.deploy(path.resolve(process.cwd(),'build',file),'default')
-    })
-  })
-}else if(program.bake){
-  fs.readdir(path.resolve(process.cwd(),'contract'),function(err,files) {
-    files.forEach(function(file) {
-      fullPath = path.resolve(process.cwd(),'contract',file)
-      Compile.compile(fullPath)
-    })
-  })
-  fs.readdir(path.resolve(process.cwd(),'build'),function(err,files) {
-    files.forEach(function(file){
-      Deploy.deploy(path.resolve(process.cwd(),'build',file),`${program.deploy}`)
-    })
-  })
-}
+
 if(program.generate){
   fs.readdir(path.resolve(process.cwd(),'contract'),function(err,files) {
     files.forEach(function(file) {
       Generate.generate(path.resolve(process.cwd(),'contract',file))
     })
   })
-  fs.readdir(path.resolve(process.cwd(),'schematic'),function(err,files){
+
+}
+
+if(program.bake === true) {
+  fs.readdir(path.resolve(process.cwd(),'contract'),function(err,files) {
+    Compile.compile(files)
+  })
+  fs.readdir(path.resolve(process.cwd(),'build'),function(err,files) {
     files.forEach(function(file){
-      console.log(JSON.parse(fs.readFileSync(path.resolve(process.cwd(),'schematic',file))))
+      Deploy.deploy(path.resolve(process.cwd(),'build',file),'default')
+      const fileSol = file.replace('.json','.sol')
+      Generate.generate(path.resolve(process.cwd(),'contract',fileSol))
+      
     })
   })
+}else if(program.bake){
+  fs.readdir(path.resolve(process.cwd(),'contract'),function(err,files) {
+    Compile.compile(files)
+    
+  })
+  fs.readdir(path.resolve(process.cwd(),'build'),function(err,files) {
+    files.forEach(function(file){
+       Deploy.deploy(path.resolve(process.cwd(),'build',file),`${program.deploy}`)
+       const fileSol = file.replace('.json','.sol')
+       Generate.generate(path.resolve(process.cwd(),'contract',fileSol))
+    })
+  })
+
 }
+
+if(program.serve === true){
+  server = new Server()
+  server.start()
+}
+
